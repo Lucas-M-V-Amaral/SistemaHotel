@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Hotel
@@ -13,7 +14,7 @@ namespace Hotel
             List<Reserva> reservas = new List<Reserva>();
             int opcao = 0;
             int opcao2 = 0;
-            string tresOpcoes = "1 - Hospede\n2 - Suite\n3 - Reserva";
+            string tresOpcoes = "1 - Hospede\n2 - Suíte\n3 - Reserva";
 
             while (opcao != 4)
             {
@@ -60,10 +61,10 @@ namespace Hotel
                         break;
                 }
 
-                void OpcoesSecundarias()
+                /*void OpcoesSecundarias()
                 {
-
-                }
+                    
+                }*/
 
                 void CadastrarHospede() {
                      string nome;
@@ -103,7 +104,71 @@ namespace Hotel
 
                 void CadastrarSuite()
                 {
+                    int numero;
+                    int andar;
+                    int capacidade;
+                    decimal valorDiaria;
 
+                    Console.WriteLine("Digite o número da suíte:");
+                    numero = int.Parse(Console.ReadLine());
+
+                    if (suites != null)
+                    {
+                        for (int i = 0; i <= suites.Count; i++)
+                        {
+                            if (numero < 0)
+                            {
+                                Console.WriteLine(i);
+                                Console.WriteLine("Não existe suíte com número negativo. Tente novamente!");
+                                numero = int.Parse(Console.ReadLine());
+                                i = 0;
+                            }
+                            if (suites[i].Numero == numero)
+                            {
+                                Console.WriteLine(i);
+                                Console.WriteLine("Já existe uma suíte com este número. Digite novamente!");
+                                numero = int.Parse(Console.ReadLine());
+                                i = 0;
+                            }
+                        }
+                    }
+
+                    Console.WriteLine("Digite o andar da suíte:");
+                    andar = int.Parse(Console.ReadLine());
+
+                    if (suites != null)
+                    {
+                        while (AvaliaSuitesPorAndar(andar))
+                        {
+                            Console.WriteLine("Aparentemente algo está errado, não é possivel haver mais suítes" +
+                                " nesse andar. Tente novamente!");
+                            andar = int.Parse(Console.ReadLine());
+                        }
+                    }
+
+                    Console.WriteLine("Digite a capacidade (de pessoas) da suíte:");
+                    capacidade = int.Parse(Console.ReadLine());
+
+                    Console.WriteLine("Digite o valor da diária da suíte:");
+                    valorDiaria = decimal.Parse(Console.ReadLine());
+
+                }
+
+                bool AvaliaSuitesPorAndar(int andar)
+                {
+                    int suitesNoAndar = 0;
+                    for (int i = 0; i <= suites.Count; i++)
+                    {
+                        if (suites[i].Andar == andar)
+                        {
+                            suitesNoAndar++;
+                        }
+                    }
+                    if (suitesNoAndar > 10)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
 
                 void CadastrarReserva()
